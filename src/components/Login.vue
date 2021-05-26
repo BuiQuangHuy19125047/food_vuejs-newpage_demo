@@ -34,12 +34,18 @@
           id="fname"
           tag="First Name"
           class="input__name input__name--first"
+          v-bind:value="firstName"
+          v-on:input="checkFirstName($event,'handleChangeStateFName')"
+          v-bind:inputType=1
         />
         <Input
           input_type="text"
           id="lname"
           tag="Last Name"
           class="input__name input__name--last"
+          v-bind:value="lastName"
+          v-on:input="checkLastName($event,'handleChangeStateLName')"
+          v-bind:inputType=2
         />
         <Input input_type="email" id="email" tag="Email" class="input__email"/>
         <div class="input__dropdown">
@@ -61,6 +67,8 @@
           note="<p>at least 8 characters</p>"
           isPwd
           class="input__pwd"
+          v-bind:value="passWord"
+          v-on:input="checkPassWord($event)"
         />
       </div>
       <div v-else class="main__input">
@@ -72,6 +80,8 @@
           note="<a class='input__note' href='#'>Forgot your password?</a>"
           isPwd
           class="input__pwd"
+          v-bind:value="passWord"
+          v-on:input="checkPassWord($event)"
         />
       </div>
       <LoginButton
@@ -95,8 +105,16 @@ import Input from "../share/components/Input";
 import LoginButton from "../share/components/LoginButton";
 import Footer from "../components/Footer";
 import LoginHeader from "../components/LoginHeader"
+import { required} from 'vuelidate/lib/validators'
 export default {
   name: "Login",
+  data () {
+    return{
+      firstName : '',
+      lastName : '',
+      passWord: '',
+    }
+  },
   components: {
     Input,
     LoginButton,
@@ -110,12 +128,47 @@ export default {
     signup: Boolean,
     changeTo: String,
   },
+  methods: {
+    checkFirstName: function (event,action) {
+      this.firstName = event
+      let curState = this.$v.firstName.required
+      if(curState){
+        this.$store.dispatch(action,true)
+      }  
+      else{
+        this.$store.dispatch(action,false)
+      }    
+    },
+    checkLastName: function (event,action) {
+      this.lastName = event
+      let curState = this.$v.lastName.required
+      if(curState){
+        this.$store.dispatch(action,true)
+      }  
+      else{
+        this.$store.dispatch(action,false)
+      }    
+    },
+    checkPassWord: function(event){
+      this.passWord = event
+      console.log(event)
+    }
+  },
+  validations: {
+    firstName:{
+      required,
+    },
+    lastName:{
+      required,
+    }
+  }
 };
 </script>
 <style scoped>
 *{
   font-family: Roboto;
 }
+
 /* Start button-color */
 .facebook-button--color {
   background-color: rgb(59, 89, 152);

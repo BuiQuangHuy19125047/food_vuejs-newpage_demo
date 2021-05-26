@@ -6,12 +6,16 @@
     </div>
 
     <div class="input__field">
-      <input ref="input" v-bind:type="type_input" v-bind:id="id" v-bind:name="id" class="input__typein"/>
+      <input ref="input" v-bind:type="type_input" v-bind:id="id" v-bind:name="id" class="input__typein" v-model="inputVal" />
       <span v-if="isPwd">
         <button v-on:click="showPwd" v-if="show" class="input__pwd-show">Show</button>
         <button v-on:click="showPwd" v-else class="input__pwd-show" >Hide</button>
       </span>
     </div>
+    <!-- Required for first name -->
+    <div class="error" v-if="!$store.state.fNameValid && inputType === 1">{{error}}</div>
+    <!-- Required for last name -->
+    <div class="error" v-if="!$store.state.lNameValid && inputType === 2">{{error}}</div>
   </div>
 </template>
 <script>
@@ -22,21 +26,45 @@ export default {
     id: String,
     tag: String,
     note: String,
-    isPwd: Boolean
+    isPwd: Boolean,
+    value: String,
+    inputType: Number,
   },
   data: function(){
         return {
             show: true,
             showText: true, 
-            type_input: this.input_type   
+            type_input: this.input_type,
+            pwd: String
         }
     },
+  computed: {
+    inputVal: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        this.$emit('input', val);
+      }
+    },
+    error() {
+      switch(this.inputType){
+        case 1:{
+          return "Field is required"
+        }
+        case 2:{
+          return "Field is required"
+        }
+      }
+      return ""
+    }
+  },
   methods: {
     showPwd: function(){
-        this.show = !this.show;
-        this.showText = !this.showText;
-        this.type_input = this.type_input === "password" ? "text" : "password";
-        this.$refs.input.focus();
+      this.show = !this.show;
+      this.showText = !this.showText;
+      this.type_input = this.type_input === "password" ? "text" : "password";
+      this.$refs.input.focus();
     },
   }
 };

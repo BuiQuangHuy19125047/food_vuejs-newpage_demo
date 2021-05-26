@@ -5,8 +5,12 @@ import Vuex from "vuex"
 import VueRouter from "vue-router"
 import Login from "./components/Login.vue"
 import MainPage from "./components/MainPage.vue"
+import Vuelidate from 'vuelidate'
+import store from './store'
+import 'nprogress/nprogress.css'
+import NProgress from 'nprogress'
 
-
+Vue.use(Vuelidate)
 Vue.use(VueCompositionAPI)
 Vue.use(Vuex)
 Vue.use(VueRouter)
@@ -44,11 +48,20 @@ const router = new VueRouter({
         title:"Sign Up", 
         nonState:"Already have an account?",
         changeState:"Sign In",
-        signup:"true",
+        signup: true,
         changeTo: "/login"
       }
     }
   ]
+})
+
+router.beforeEach((routeTo,routeFrom,next)=>{
+  NProgress.start()
+  next()
+})
+
+router.afterEach(() =>{
+  NProgress.done()
 })
 //If you not install the Vue Composition API, please
 //commented out above import and use statement, 
@@ -60,6 +73,7 @@ const router = new VueRouter({
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   router: router,
   render: h => h(App)
 }).$mount('#app')
