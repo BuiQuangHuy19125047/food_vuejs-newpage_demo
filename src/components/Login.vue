@@ -35,7 +35,8 @@
           tag="First Name"
           class="input__name input__name--first"
           v-bind:value="firstName"
-          v-on:input="checkFirstName($event,'handleChangeStateFName')"
+          v-model="firstName"
+          v-on:input="checkFirstName('handleChangeStateFName')"
           v-bind:inputType=1
         />
         <Input
@@ -43,8 +44,8 @@
           id="lname"
           tag="Last Name"
           class="input__name input__name--last"
-          v-bind:value="lastName"
-          v-on:input="checkLastName($event,'handleChangeStateLName')"
+          v-model="lastName"
+          v-on:input="checkLastName('handleChangeStateLName')"
           v-bind:inputType=2
         />
         <Input input_type="email" id="email" tag="Email" class="input__email"/>
@@ -67,8 +68,8 @@
           note="<p>at least 8 characters</p>"
           isPwd
           class="input__pwd"
-          v-bind:value="passWord"
-          v-on:input="checkPassWord($event)"
+          v-model="passWord"
+          v-on:input="checkPassWord()"
         />
       </div>
       <div v-else class="main__input">
@@ -80,8 +81,8 @@
           note="<a class='input__note' href='#'>Forgot your password?</a>"
           isPwd
           class="input__pwd"
-          v-bind:value="passWord"
-          v-on:input="checkPassWord($event)"
+          v-model="passWord"
+          v-on:input="checkPassWord()"
         />
       </div>
       <LoginButton
@@ -129,8 +130,7 @@ export default {
     changeTo: String,
   },
   methods: {
-    checkFirstName: function (event,action) {
-      this.firstName = event
+    checkFirstName: function (action) {
       let curState = this.$v.firstName.required
       if(curState){
         this.$store.dispatch(action,true)
@@ -139,8 +139,7 @@ export default {
         this.$store.dispatch(action,false)
       }    
     },
-    checkLastName: function (event,action) {
-      this.lastName = event
+    checkLastName: function (action) {
       let curState = this.$v.lastName.required
       if(curState){
         this.$store.dispatch(action,true)
@@ -149,9 +148,8 @@ export default {
         this.$store.dispatch(action,false)
       }    
     },
-    checkPassWord: function(event){
-      this.passWord = event
-      console.log(event)
+    checkPassWord: function(){
+
     }
   },
   validations: {

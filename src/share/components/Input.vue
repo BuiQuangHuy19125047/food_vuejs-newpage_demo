@@ -6,7 +6,7 @@
     </div>
 
     <div class="input__field">
-      <input ref="input" v-bind:type="type_input" v-bind:id="id" v-bind:name="id" class="input__typein" v-model="inputVal" />
+      <input ref="input" v-bind:type="type_input" v-bind:id="id" v-bind:name="id" class="input__typein" :value="value" @input="updateValue" />
       <span v-if="isPwd">
         <button v-on:click="showPwd" v-if="show" class="input__pwd-show">Show</button>
         <button v-on:click="showPwd" v-else class="input__pwd-show" >Hide</button>
@@ -66,6 +66,9 @@ export default {
       this.type_input = this.type_input === "password" ? "text" : "password";
       this.$refs.input.focus();
     },
+    updateValue(event){
+      this.$emit('input',event.target.value)
+    }
   }
 };
 
