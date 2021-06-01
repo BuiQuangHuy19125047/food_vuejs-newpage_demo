@@ -6,7 +6,14 @@
     </div>
 
     <div class="input__field">
-      <input ref="input" v-bind:type="type_input" v-bind:id="id" v-bind:name="id" class="input__typein" :value="value" @input="updateValue" />
+      <input ref="input" 
+      v-bind:type="type_input"
+      v-bind:id="id" 
+      v-bind:name="id" 
+      class="input__typein" 
+      :value="value" 
+      @input="updateValue"
+      v-on="listeners" />
       <span v-if="isPwd">
         <button v-on:click="showPwd" v-if="show" class="input__pwd-show">Show</button>
         <button v-on:click="showPwd" v-else class="input__pwd-show" >Hide</button>
@@ -16,6 +23,16 @@
     <div class="error" v-if="!$store.state.fNameValid && inputType === 1">{{error}}</div>
     <!-- Required for last name -->
     <div class="error" v-if="!$store.state.lNameValid && inputType === 2">{{error}}</div>
+    <!-- Required for email -->
+    <div class="error" v-if="!$store.state.emailValidRequired && inputType === 3">{{error[0]}}</div>
+    <!-- Form validation for email -->
+    <div class="error" v-if="!$store.state.emailValidForm && inputType === 3">{{error[1]}}</div>
+    <!-- Required for pwd -->
+    <div class="error" v-if="!$store.state.pwdRequired && inputType === 4">{{error[0]}}</div>
+    <!-- Min length pwd -->
+    <div class="error" v-if="!$store.state.pwdLength && inputType === 4">{{error[1]}}</div>
+    <!-- Min length pwd -->
+    <div class="error" v-if="!$store.state.phoneNum && inputType === 5">{{error}}</div>
   </div>
 </template>
 <script>
@@ -55,9 +72,24 @@ export default {
         case 2:{
           return "Field is required"
         }
+        case 3:{
+          return ["Field is required","It must be an email address"]
+        }
+        case 4:{
+          return ["Field is required","Min length is 8 words"]
+        }
+        case 5:{
+          return "Field is required"
+        }
       }
       return ""
-    }
+    },
+    listeners(){
+      return{
+        ...this.$listeners,	
+        input: this.updateValue
+      }
+	}
   },
   methods: {
     showPwd: function(){

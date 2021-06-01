@@ -34,9 +34,9 @@
           id="fname"
           tag="First Name"
           class="input__name input__name--first"
-          v-bind:value="firstName"
           v-model="firstName"
-          v-on:input="checkFirstName('handleChangeStateFName')"
+          v-on:blur="checkFirstName('handleChangeStateFName')"
+          v-on:input="resetValidation('handleChangeStateFName')"
           v-bind:inputType=1
         />
         <Input
@@ -45,10 +45,20 @@
           tag="Last Name"
           class="input__name input__name--last"
           v-model="lastName"
-          v-on:input="checkLastName('handleChangeStateLName')"
+          v-on:blur="checkLastName('handleChangeStateLName')"
+          v-on:input="resetValidation('handleChangeStateLName')"
           v-bind:inputType=2
         />
-        <Input input_type="email" id="email" tag="Email" class="input__email"/>
+        <Input 
+          input_type="email" 
+          id="email" 
+          tag="Email" 
+          class="input__email"
+          v-model="email"
+          v-on:blur="checkEmail('handleChangeStateEmailRequired')"
+          v-on:input="resetValidation('handleSetTrueEmail')"
+          v-bind:inputType=3
+        />
         <div class="input__dropdown">
           <label for="countryCode" class="dropdown__label">Country</label>
           <div class="dropdown__field">
@@ -60,7 +70,16 @@
             </select>
           </div>
         </div>
-        <Input input_type="tel" id="tel" tag="Mobile Number" class="input__tel"/>
+        <Input
+          input_type="tel" 
+          id="tel" 
+          tag="Mobile Number" 
+          class="input__tel"
+          v-model="phoneNumber"
+          v-on:blur="checkPhoneNum('handleChangeStatePhoneNum')"
+          v-on:input="resetValidation('handleChangeStatePhoneNum')"
+          v-bind:inputType=5
+          />
         <Input
           input_type="password"
           id="pwd"
@@ -69,11 +88,22 @@
           isPwd
           class="input__pwd"
           v-model="passWord"
-          v-on:input="checkPassWord()"
+          v-on:input="resetValidation('handleSetTruePwd')"
+          v-on:blur="checkPassWord('handleChangeStatePwdRequired')"
+          v-bind:inputType=4
         />
       </div>
       <div v-else class="main__input">
-        <Input input_type="email" id="email" tag="Email" class="input__email"/>
+        <Input 
+          input_type="email"
+          id="email"
+          tag="Email"
+          class="input__email"
+          v-model="email"
+          v-on:blur="checkEmail('handleChangeStateEmailRequired')"
+          v-on:input="resetValidation('handleSetTrueEmail')"
+          v-bind:inputType=3
+        />
         <Input
           input_type="password"
           id="pwd"
@@ -81,8 +111,6 @@
           note="<a class='input__note' href='#'>Forgot your password?</a>"
           isPwd
           class="input__pwd"
-          v-model="passWord"
-          v-on:input="checkPassWord()"
         />
       </div>
       <LoginButton
@@ -106,7 +134,7 @@ import Input from "../share/components/Input";
 import LoginButton from "../share/components/LoginButton";
 import Footer from "../components/Footer";
 import LoginHeader from "../components/LoginHeader"
-import { required} from 'vuelidate/lib/validators'
+import { required,email,minLength} from 'vuelidate/lib/validators'
 export default {
   name: "Login",
   data () {
@@ -114,6 +142,8 @@ export default {
       firstName : '',
       lastName : '',
       passWord: '',
+      email:'',
+      phoneNumber:'',
     }
   },
   components: {
@@ -130,33 +160,71 @@ export default {
     changeTo: String,
   },
   methods: {
+    resetValidation: function(action){
+      this.$store.dispatch(action,true)
+    },
     checkFirstName: function (action) {
-      let curState = this.$v.firstName.required
+      this.$v.firstName.$touch()
+      let curState = this.$v.firstName.$error
       if(curState){
-        this.$store.dispatch(action,true)
-      }  
-      else{
         this.$store.dispatch(action,false)
-      }    
+      }   
     },
     checkLastName: function (action) {
-      let curState = this.$v.lastName.required
+      this.$v.lastName.$touch()
+      let curState = this.$v.lastName.$error
       if(curState){
-        this.$store.dispatch(action,true)
-      }  
-      else{
         this.$store.dispatch(action,false)
-      }    
+      }  
     },
-    checkPassWord: function(){
+    checkEmail: function (action) {
+      this.$v.email.$touch()
+      let curStateRequired = this.$v.email.required
+      let curStateEmailValid = this.$v.email.email
+      if(!curStateRequired){
+        this.$store.dispatch(action,false)
+      }  
+      else if(!curStateEmailValid){
+        this.$store.dispatch('handleChangeStateEmailForm',false)
+      }
+    },
 
-    }
+    checkPassWord: function(action){
+      this.$v.passWord.$touch()
+      let curStateRequired = this.$v.passWord.required
+      let curStateEmailValid = this.$v.passWord.minLength
+      if(!curStateRequired){
+        this.$store.dispatch(action,false)
+      }  
+      else if(!curStateEmailValid){
+        this.$store.dispatch('handleChangeStatePwdLength',false)
+      }
+    },
+    checkPhoneNum: function(action){
+      this.$v.phoneNumber.$touch()
+      let curState = this.$v.phoneNumber.$error
+      console.log(curState)
+      if(curState){
+        this.$store.dispatch(action,false)
+      }  
+    },
   },
   validations: {
     firstName:{
       required,
     },
     lastName:{
+      required,
+    },
+    passWord:{
+      required,
+      minLength: minLength(8),
+    },
+    email:{
+      email,
+      required,
+    },
+    phoneNumber:{
       required,
     }
   }
