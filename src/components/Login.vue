@@ -36,7 +36,7 @@
           class="input__name input__name--first"
           v-model="firstName"
           v-on:blur="checkFirstName('handleChangeStateFName')"
-          v-on:input="resetValidation('handleChangeStateFName')"
+          v-on:focus="resetValidation('handleChangeStateFName')"
           v-bind:inputType=1
         />
         <Input
@@ -46,7 +46,7 @@
           class="input__name input__name--last"
           v-model="lastName"
           v-on:blur="checkLastName('handleChangeStateLName')"
-          v-on:input="resetValidation('handleChangeStateLName')"
+          v-on:focus="resetValidation('handleChangeStateLName')"
           v-bind:inputType=2
         />
         <Input 
@@ -56,7 +56,7 @@
           class="input__email"
           v-model="email"
           v-on:blur="checkEmail('handleChangeStateEmailRequired')"
-          v-on:input="resetValidation('handleSetTrueEmail')"
+          v-on:focus="resetValidation('handleSetTrueEmail')"
           v-bind:inputType=3
         />
         <div class="input__dropdown">
@@ -77,7 +77,7 @@
           class="input__tel"
           v-model="phoneNumber"
           v-on:blur="checkPhoneNum('handleChangeStatePhoneNum')"
-          v-on:input="resetValidation('handleChangeStatePhoneNum')"
+          v-on:focus="resetValidation('handleChangeStatePhoneNum')"
           v-bind:inputType=5
           />
         <Input
@@ -88,7 +88,7 @@
           isPwd
           class="input__pwd"
           v-model="passWord"
-          v-on:input="resetValidation('handleSetTruePwd')"
+          v-on:focus="resetValidation('handleSetTruePwd')"
           v-on:blur="checkPassWord('handleChangeStatePwdRequired')"
           v-bind:inputType=4
         />
@@ -101,7 +101,7 @@
           class="input__email"
           v-model="email"
           v-on:blur="checkEmail('handleChangeStateEmailRequired')"
-          v-on:input="resetValidation('handleSetTrueEmail')"
+          v-on:focus="resetValidation('handleSetTrueEmail')"
           v-bind:inputType=3
         />
         <Input

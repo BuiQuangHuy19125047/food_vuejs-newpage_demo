@@ -5,13 +5,14 @@
       <span class="input__note" v-html="note"></span>
     </div>
 
-    <div class="input__field">
+    <div class="input__field" v-bind:class="borderError">
       <input ref="input" 
       v-bind:type="type_input"
       v-bind:id="id" 
       v-bind:name="id" 
       class="input__typein" 
       :value="value" 
+
       @input="updateValue"
       v-on="listeners" />
       <span v-if="isPwd">
@@ -46,6 +47,7 @@ export default {
     isPwd: Boolean,
     value: String,
     inputType: Number,
+    isError: Boolean
   },
   data: function(){
         return {
@@ -56,6 +58,17 @@ export default {
         }
     },
   computed: {
+  borderError: function () {
+    return {
+      'error-border': (!this.$store.state.fNameValid && this.inputType === 1) || 
+      (!this.$store.state.lNameValid && this.inputType === 2) ||
+      (!this.$store.state.emailValidRequired && this.inputType === 3) ||
+      (!this.$store.state.emailValidForm  && this.inputType === 3) ||
+      (!this.$store.state.pwdRequired && this.inputType === 4) ||
+      (!this.$store.state.phoneNum && this.inputType === 5) ||
+      (!this.$store.state.pwdRequired && this.inputType === 4),
+    }
+  },
     inputVal: {
       get() {
         return this.value;
@@ -89,7 +102,8 @@ export default {
         ...this.$listeners,	
         input: this.updateValue
       }
-	}
+	},
+
   },
   methods: {
     showPwd: function(){
@@ -107,6 +121,16 @@ export default {
 
 </script>
 <style>
+.error{
+  color: red;
+  font-size: 14px;
+  text-align: start;
+}
+
+.error-border{
+  border-style: solid;
+  border-color: red;
+}
 .input {
   margin: 5px 0;
   width: 100%;

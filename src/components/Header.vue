@@ -1,9 +1,9 @@
 <template>
   <div id="header" >
     <div v-bind:class="classObject" class=" nav--max-height header__container">
-      <div v-bind:class="{'cotainer--max-height-scroll': isScroll}" class="nav--max-height nav-container">
+      <div v-bind:class="{'container--max-height-scroll': isScroll}" class="nav--max-height nav-container">
       <!-- Begin nav-list -->
-        <div v-bind:class="{'cotainer--max-height-scroll': isScroll}" class="nav--max-height nav">
+        <div v-bind:class="{'container--max-height-scroll': isScroll}" class="nav--max-height nav">
           <ul class="nav--max-height nav__list">
             <li >
               <a href="#">
@@ -60,7 +60,7 @@
             <img src="../assets/headerImg/logo.png" alt="Hamburger">
           </a>
         </div>
-        <div v-bind:class="{'cotainer--max-height-scroll': isScroll}" class="nav--max-height nav__order">
+        <div v-bind:class="{'container--max-height-scroll': isScroll}" class="nav--max-height nav__order">
           <div class="nav__order-button">
             <a href="#">Order online</a>
           </div>
@@ -102,7 +102,7 @@ export default {
   classObject: function () {
     return {
       'header__container--onscroll': this.isScroll,
-      'cotainer--max-height-scroll': this.isScroll,
+      'container--max-height-scroll': this.isScroll,
       'header__container--scroll-top': !this.isScroll && !this.isCreated
     }
   }
@@ -215,7 +215,7 @@ html{
   background-color: #000;
 }
 
-#header .cotainer--max-height-scroll{
+#header .container--max-height-scroll{
   max-height: 100px;
 }
 
